@@ -1,0 +1,120 @@
+/* Large screens (desktop < 1280px) */
+@media only screen and (max-width: 1026px) {
+
+  .auth-title {
+    font-size: xx-large;
+  }
+
+  .auth-sub-title {
+    font-size: 15px;
+  }
+
+}
+
+/* Medium screens (tablet / small desktop) */
+@media only screen and (max-width: 768px) {
+
+
+  .auth-content-section .auth-content-box {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+  }
+}
+
+/* Small screens (mobile phones) */
+@media only screen and (max-width: 450px) {
+
+
+  .auth-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .auth-sub-title {
+    font-size: 14px !important;
+  }
+
+  .auth-forms input {
+    font-size: 14px !important;
+    padding: 10px 40px;
+  }
+
+  
+}
+
+/* Extra large screens (1280–1330px) */
+@media (min-width: 1280px) and (max-width: 1366px) {
+  html {
+    font-size: 12px;
+  }
+
+  .auth-content-section .auth-content-box .outline img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .auth-title {
+    font-size: 25px;
+    line-height: 32px;
+  }
+
+  .auth-sub-title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+}
+
+@media (min-width: 1026px) and (max-width: 1280px) {
+  .auth-title {
+    font-size: xx-large;
+  }
+
+  .auth-sub-title {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 998px) {
+  .auth-title {
+    font-size: 28px;
+  }
+
+  .auth-sub-title {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 998px) and (max-width: 1026px) {
+
+  .auth-title {
+    font-size: 30px;
+  }
+
+  .auth-sub-title {
+    font-size: 14px;
+  }
+
+}
+
+@media (min-width: 1366px) and (max-width: 1610px) {
+  .auth-title {
+    font-size: 32px;
+  }
+
+  .auth-sub-title {
+    font-size: 16px;
+  }
+
+}
+
+@media (min-width: 1610px) and (max-width: 3000px) {
+
+  .auth-title {
+    font-size: 35px;
+  }
+
+  .auth-sub-title {
+    font-size: 16px;
+  }
+}
