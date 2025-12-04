@@ -62,3 +62,15 @@
 .error-input-field{
     border-color: var(--fg-fg-error-secondary);
 }
+
+.bars {
+  display: flex;
+  gap: var(--rem-4);
+}
+
+.bar {
+  width:clamp(var(--rem-16),3vw,var(--rem-24)) ;
+  flex: 1;
+  height: 4px;
+  border-radius: 6px;
+}

@@ -74,7 +74,7 @@ const OAuth = () => {
         <p className="m-0">Redirecting to Dashboard in {count}s...</p>
         <Image
           src="/assets/images/arrowsAndChevrons/arrow-right.svg"
-          alt="arrow-left"
+          alt="arrow-right"
           width={20}
           height={20}
         />

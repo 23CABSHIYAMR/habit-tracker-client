@@ -147,32 +147,27 @@ const SignUp = () => {
             error={errors.password}
             leftIcon={<LockIcon />}
           />
-
           <PasswordStrengthIndicator value={formData.password} />
-
-          <div
-            className="d-flex align-items-start gap-2 w-100"
-            onClick={() =>
-              setFormData((p) => ({
-                ...p,
-                acceptTermsAndPolicy: !p.acceptTermsAndPolicy,
-              }))
-            }
-            style={{ cursor: "pointer", marginTop: "-10px" }}
+          <label
+            className="w-100 d-flex gap-2"
           >
-            <Image
-              src={`/assets/images/toggleable/${
-                formData.acceptTermsAndPolicy ? "checked" : "unchecked"
-              }.svg`}
-              alt="checkbox"
-              width={16}
-              height={16}
+            <input
+              type="checkbox"
+              checked={formData.acceptTermsAndPolicy}
+              onChange={(e) =>
+                setFormData((p) => ({
+                  ...p,
+                  acceptTermsAndPolicy: e.target.checked,
+                }))
+              }
+              style={{ width: "16px", height: "16px" ,marginTop:"5px"}} // hide default checkbox
+              required
             />
-            <span className="terms-privacy">
+            <span className="terms-privacy p-0">
               I agree to the <a href="#">Terms & Conditions</a> and{" "}
               <a href="#">Privacy Policy.</a>
             </span>
-          </div>
+          </label>
 
           <Button
             type="submit"

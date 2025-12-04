@@ -38,7 +38,8 @@
     "reactstrap": "^9.2.3",
     "sass": "^1.89.2",
     "sweetalert2": "^11.17.2",
-    "tailwindcss": "^4.1.14"
+    "tailwindcss": "^4.1.14",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/node": "22.13.17",
