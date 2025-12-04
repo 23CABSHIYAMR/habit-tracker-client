@@ -1,39 +1,15 @@
-import {
-  brokerImages
-} from "@/constants"
-import moment from "moment"
-
-export const formatRemainingTime = (seconds) => {
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-
-export const getDifferenceInMs = (end, start) => {
-  return new Date(end) - new Date(start);
-}
-
-export const getBrokerImage = (brokerName) => {
-  if (!brokerImages[brokerName]) {
-    return "/assets/images/icon/crypto.svg";
-  }
-  return brokerImages[brokerName]
-}
-
-export const getTitleForPath = (path) => {
-  for (let category of menuList) {
-    for (let item of category.menu) {
-      if (item.url === `/${path}`) {
-        const title = category.title.replace("-", "").trim();
-        return `${title}`;
-      }
-    }
-  }
-  return "";
-}
+import moment from "moment";
 
 export const getColorFromText = (text) => {
-  const colors = ["#1abc9c", "#3498db", "#9b59b6", "#f39c12", "#e74c3c", "#2ecc71", "#e67e22"];
+  const colors = [
+    "#1abc9c",
+    "#3498db",
+    "#9b59b6",
+    "#f39c12",
+    "#e74c3c",
+    "#2ecc71",
+    "#e67e22",
+  ];
   let hash = 0;
   for (let i = 0; i < text.length; i++) {
     hash = text.charCodeAt(i) + ((hash << 5) - hash);
@@ -41,29 +17,10 @@ export const getColorFromText = (text) => {
   return colors[Math.abs(hash) % colors.length];
 };
 
-export const getInitials = (name) => {
-  if (!name) return "";
-
-  // Check for space-separated names
-  const spaceSplit = name.trim().split(" ");
-  if (spaceSplit.length >= 2) {
-    return spaceSplit[0][0] + spaceSplit[1][0];
-  }
-
-  // Check for camelCase
-  const camelCaseMatch = name.match(/[A-Z]/g);
-  if (camelCaseMatch && camelCaseMatch.length >= 2) {
-    return camelCaseMatch[0] + camelCaseMatch[1];
-  }
-
-  // Default: first letter
-  return name[0];
-}
-
 export const formatToLocalDate24 = (date) => {
   if (!date) return "";
 
-  const localDate = moment(date).utcOffset(330)
+  const localDate = moment(date).utcOffset(330);
 
   return localDate.format("MMM D, YYYY HH:mm");
 };
@@ -75,10 +32,10 @@ export const formatToLocalTimestamp = (date) => {
 
 export const getLocalDate = (date) => {
   if (!date) {
-    return ""
+    return "";
   }
   return moment(date).format("DD-MM-YYYY HH:mm");
-}
+};
 
 export const colorCycle = ["primary", "warning", "success", "secondary"];
 
@@ -89,17 +46,14 @@ export const getRandomColor = () => {
 
 export const convertUTCToLocal = (utcString) => {
   return moment.utc(utcString).local().format("MMMM D, YYYY HH:mm");
-}
+};
 
 export const toUTCString = (dateStr, timeStr) => {
   if (!dateStr) return null;
   const [year, month, day] = dateStr.split("-").map(Number);
-  const [hour = 0, minute = 0] = (timeStr || "00:00")
-  .split(":")
-    .map(Number);
+  const [hour = 0, minute = 0] = (timeStr || "00:00").split(":").map(Number);
   const localDate = new Date(year, month - 1, day, hour, minute, 0);
   return localDate.toISOString();
 };
-
 
 //work on helpers and index.js to build the layout
