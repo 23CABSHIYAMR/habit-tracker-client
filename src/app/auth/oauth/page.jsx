@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+import { useAuthMe } from "@/app/hooks/authAPI/useAuth";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
-import api from "@/app/(MainBody)/api/apiInstance";
+
 
 export default function OAuth() {
   const router = useRouter();

@@ -33,6 +33,5 @@ export const useAuthMe = () => {
     queryKey: ["me"],
     queryFn: fetchMe,
     retry: false,
-    ...options,
   });
 };

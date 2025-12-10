@@ -13,6 +13,6 @@ export const logoutService = async () => {
     return response;
 };
 export const fetchMe = async () => {
-    const response=await api.get("auth/me",{withCredentials:true});
+    const response=await api.get("/auth/me",{withCredentials:true});
     return response.data;
 }
