@@ -88,9 +88,9 @@ const SignUp = () => {
     signUp(body, {
       onSuccess: async (res) => {
         if (res?.status === 201) {
-          const user = await fetchMe();
-          dispatch(setUser(user));
-          router.push("/week");
+          // const user = await fetchMe();
+          // dispatch(setUser(user));
+          router.push("/auth/oauth");
         }
       },
       onError: (error) => {
