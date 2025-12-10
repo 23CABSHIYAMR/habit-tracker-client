@@ -1,28 +1,25 @@
-import { NextResponse } from "next/server";
+
+import { proxyRequest } from "next/server";
 
 export function proxy(request) {
-  const token = request.cookies.get("token")?.value;
-  console.log(token);
-  console.log("cookies in middleware:", request.cookies.getAll());
+  const url = new URL(request.url);
 
-  const path = request.nextUrl.pathname;
+  // Proxy ALL backend API calls
+  if (url.pathname.startsWith("/api/")) {
+    const backend = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  const isOAuthCallback = path.startsWith("/auth/oauth");
-  if (isOAuthCallback) return NextResponse.next();
+    const target = backend + url.pathname.replace("/api", "") + url.search;
 
-  const isAuthPage = path.startsWith("/auth");
+    return proxyRequest(request, target, {
+      include: {
+        cookies: true,
+      },
+    });
+  }
 
-  if (token && !isAuthPage) return NextResponse.next();
-
-  if (token && isAuthPage)
-    return NextResponse.redirect(new URL("/week", request.url));
-
-  if (!token && !isAuthPage)
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-
-  return NextResponse.next();
+  return; // continue normal handling
 }
 
 export const config = {
-  matcher: ["/week", "/month", "/year", "/all-time", "/auth/:path*"],
+  matcher: ["/api/:path*"],
 };
