@@ -20,9 +20,9 @@ export function proxy(request) {
   }
 
   // 2 — API PROXY (required for cookies)
-  if (path.startsWith("/api/")) {
+  if (path.startsWith("/server/")) {
     const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const target = backend + path.replace("/api", "") + url.search;
+    const target = backend + path.replace("/server", "") + url.search;
 
     return proxyRequest(request, target, {
       include: { cookies: true },
@@ -35,7 +35,7 @@ export function proxy(request) {
 
 export const config = {
   matcher: [
-    "/api/:path*",
+    "/server/:path*",
     "/week",
     "/month",
     "/year",

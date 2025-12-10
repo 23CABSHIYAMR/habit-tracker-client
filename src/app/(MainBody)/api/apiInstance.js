@@ -5,7 +5,7 @@ import {
 } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: "/server",
   //timeout: 10000,
   withCredentials:true,
 });
