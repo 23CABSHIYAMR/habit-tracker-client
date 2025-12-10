@@ -1,6 +1,11 @@
 "use client";
-import { loginService,SignUpService,logoutService } from "@/app/services/auth/authService";
-import { useMutation } from "@tanstack/react-query";
+import {
+  loginService,
+  SignUpService,
+  logoutService,
+  fetchMe,
+} from "@/app/services/auth/authService";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useLogin = () => {
   return useMutation({
@@ -21,5 +26,13 @@ export const useLogout = () => {
     mutationFn: () => {
       return logoutService();
     },
+  });
+};
+export const useAuthMe = () => {
+  return useQuery({
+    queryKey: ["me"],
+    queryFn: fetchMe,
+    retry: false,
+    ...options,
   });
 };

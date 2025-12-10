@@ -65,8 +65,9 @@ const Login = () => {
     if (!valid) return;
 
     login(formData, {
-      onSuccess: async (response) => {
-        dispatch(setUser(response?.data?.user))
+      onSuccess: async () => {
+        const user = await fetchMe();
+    dispatch(setUser(user));
         router.push("/week");
       },
       onError: (error) => {

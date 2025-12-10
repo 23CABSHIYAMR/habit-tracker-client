@@ -14,7 +14,7 @@ import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 const SignUp = () => {
   const router = useRouter();
   const { mutate: signUp, isPending } = useSignUp();
-  const dispatch=useAppDispatch();
+  const dispatch = useAppDispatch();
   // ---------------- FORM DATA ----------------
   const [formData, setFormData] = useState({
     fullName: "",
@@ -86,7 +86,8 @@ const SignUp = () => {
     signUp(body, {
       onSuccess: async (res) => {
         if (res?.status === 201) {
-          dispatch(setUser(res.data?.user))
+          const user = await fetchMe();
+          dispatch(setUser(user));
           router.push("/week");
         }
       },

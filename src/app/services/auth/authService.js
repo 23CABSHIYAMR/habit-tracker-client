@@ -12,3 +12,7 @@ export const logoutService = async () => {
     const response = await api.delete("/auth/logout");
     return response;
 };
+export const fetchMe = async () => {
+    const response=await api.get("auth/me",{withCredentials:true});
+    return response.data;
+}
