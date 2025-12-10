@@ -1,10 +1,10 @@
 import { NextResponse, proxyRequest } from "next/server";
 
 export function proxy(request) {
-  const url = new URL(request.url);
+  const url = request.nextUrl; // important: use nextUrl, not new URL()
   const path = url.pathname;
 
-  // 1 — AUTH LOGIC (Middleware replacement)
+  // 1 — AUTH LOGIC
   const token = request.cookies.get("token")?.value;
   const isAuthPage = path.startsWith("/auth");
   const isOAuthCallback = path.startsWith("/auth/oauth");
@@ -19,17 +19,24 @@ export function proxy(request) {
     }
   }
 
-  // 2 — API PROXY (required for cookies)
+  // 2 — API PROXY
   if (path.startsWith("/server/")) {
     const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
-    const target = backend + path.replace("/server", "") + url.search;
+
+    // Modify the request URL before proxying
+    url.pathname = path.replace("/server", "");
+
+    const target = backend + url.pathname + url.search;
 
     return proxyRequest(request, target, {
-      include: { cookies: true },
+      include: {
+        cookies: true,
+        headers: true,
+        credentials: true,
+      },
     });
   }
 
-  // Default pass-through
   return NextResponse.next();
 }
 
