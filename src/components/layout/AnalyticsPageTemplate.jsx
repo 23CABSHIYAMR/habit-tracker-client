@@ -26,7 +26,7 @@ export default function AnalyticsPageTemplate({
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
 
-  const [prevRange, setPrevRange] = useState(getPrevRange(startDate, user));
+  const [prevRange, setPrevRange] = useState(getPrevRange(startDate, user || {}));
   const [nextRange, setNextRange] = useState(getNextRange(startDate));
 
   const [canPrev, setCanPrev] = useState(true);
@@ -45,7 +45,7 @@ export default function AnalyticsPageTemplate({
 
   // recompute ranges on movement
   useEffect(() => {
-    setPrevRange(getPrevRange(startDate, user));
+    setPrevRange(getPrevRange(startDate, user || {}));
     setNextRange(getNextRange(startDate));
   }, [startDate]);
 
@@ -60,7 +60,7 @@ export default function AnalyticsPageTemplate({
     const today = new Date();
 
     setCanNext(nextRange.start <= today);
-    setCanPrev(prevRange.start >= new Date(user.createdAt));
+    setCanPrev(prevRange.start >= new Date(user?.createdAt));
   }, [nextRange, prevRange, allowMovement, user]);
 
   return (

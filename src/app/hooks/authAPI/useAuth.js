@@ -28,10 +28,12 @@ export const useLogout = () => {
     },
   });
 };
-export const useAuthMe = () => {
+export const useAuthMe = (options = {}) => {
   return useQuery({
     queryKey: ["me"],
     queryFn: fetchMe,
     retry: false,
+    refetchOnWindowFocus: false,
+    ...options,
   });
 };

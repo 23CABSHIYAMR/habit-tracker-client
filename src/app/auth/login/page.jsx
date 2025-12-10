@@ -9,6 +9,7 @@ import InputField from "@/components/ui/CustomInput";
 import { MailIcon, LockIcon } from "@/components/ui/SvgIcons";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
+import { fetchMe } from "@/app/services/auth/authService";
 const Login = () => {
   const router = useRouter();
   const { mutate: login, isPending } = useLogin();

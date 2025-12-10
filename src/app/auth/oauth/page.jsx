@@ -5,21 +5,24 @@ import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/app/hooks/authAPI/useAuth";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
-
-
+import { useEffect } from "react";
 export default function OAuth() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading } = useAuthMe({
-    onSuccess: (user) => {
-      dispatch(setUser(user));
+  const { data, error, isLoading } = useAuthMe();
+
+  // 🔥 Redirect logic must be inside useEffect
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (data) {
+      dispatch(setUser(data));
       router.replace("/week");
-    },
-    onError: () => {
+    } else if (error) {
       router.replace("/auth/login");
-    },
-  });
+    }
+  }, [data, error, isLoading, dispatch, router]);
 
   return (
     <div className="center-items-col gap-4">

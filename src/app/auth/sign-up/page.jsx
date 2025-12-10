@@ -11,6 +11,8 @@ import { Form, Button } from "reactstrap";
 import PasswordStrengthIndicator from "@/components/auth/passwordStrengthIndicator";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
+import { fetchMe } from "@/app/services/auth/authService";
+
 const SignUp = () => {
   const router = useRouter();
   const { mutate: signUp, isPending } = useSignUp();
