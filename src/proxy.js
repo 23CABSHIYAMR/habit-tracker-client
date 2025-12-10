@@ -23,7 +23,7 @@ export async function proxy(request) {
 
   // --- API PROXY ---
   if (path.startsWith("/server/")) {
-    const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const backend = process.env.NEXT_PUBLIC_API_BASE_URL;
     const targetPath = path.replace("/server", "");
     const targetUrl = backend + targetPath + url.search;
 
