@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const token = request.cookies.get("token")?.value;
   console.log(token);
-  console.log("🍪 cookies in middleware:", request.cookies.getAll());
+  console.log("cookies in middleware:", request.cookies.getAll());
 
   const path = request.nextUrl.pathname;
 

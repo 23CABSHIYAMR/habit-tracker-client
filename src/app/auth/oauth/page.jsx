@@ -12,7 +12,6 @@ export default function OAuth() {
 
   const { data, error, isLoading } = useAuthMe();
 
-  // 🔥 Redirect logic must be inside useEffect
   useEffect(() => {
     if (isLoading) return;
 
