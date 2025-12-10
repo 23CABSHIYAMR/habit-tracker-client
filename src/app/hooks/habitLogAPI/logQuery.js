@@ -1,10 +1,15 @@
 import { logService } from "@/app/services/api/logService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { setLogsByDate,updateSingleLog } from "@/ReduxToolkit/Reducers/Log/LogReducer";
+import { useAppDispatch, useAppSelector } from "@/ReduxToolkit/hooks";
+import {
+  setLogsByDate,
+  updateSingleLog,
+  setLogsByRange,
+  setAnalyticsByRange,
+} from "@/ReduxToolkit/Reducers/Log/LogReducer";
 
 export const useGetLogsByDate = (date) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return useQuery({
     queryKey: ["logs", date],
     queryFn: () => logService.getLogsByDate(date),
@@ -16,7 +21,7 @@ export const useGetLogsByDate = (date) => {
 
 export const useCompleteHabit = () => {
   const qc = useQueryClient();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: logService.completeHabit,
@@ -35,7 +40,7 @@ export const useCompleteHabit = () => {
 
 export const useUncompleteHabit = () => {
   const qc = useQueryClient();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationFn: logService.uncompleteHabit,
@@ -49,5 +54,38 @@ export const useUncompleteHabit = () => {
       );
       qc.invalidateQueries(["logs", vars.date]);
     },
+  });
+};
+export const useGetLogsInRange = (startDate, endDate) => {
+  const dispatch = useAppDispatch();
+  const key = `${startDate}_${endDate}`;
+  const cached = useAppSelector((state) => state.log.rangeCache[key]);
+
+  return useQuery({
+    queryKey: ["logs-range", startDate, endDate],
+    queryFn: () => logService.getLogsInRange(startDate, endDate),
+    enabled: !!startDate && !!endDate,
+    onSuccess: (data) => dispatch(setLogsByRange({ key, logs: data })),
+    select: (data) => cached || data,
+  });
+};
+export const useGetAnalyticsForRange = (
+  startDate,
+  endDate,
+  prevStart,
+  prevEnd
+) => {
+  const dispatch = useAppDispatch();
+  const key = `${startDate}_${endDate}`;
+  const cached = useAppSelector((state) => state.log.analyticsCache[key]);
+
+  return useQuery({
+    queryKey: ["analytics-range", startDate, endDate, prevStart, prevEnd],
+    queryFn: () =>
+      logService.getAnalyticsForRange(startDate, endDate, prevStart, prevEnd),
+    enabled: !!startDate && !!endDate,
+    onSuccess: (data) =>
+      dispatch(setAnalyticsByRange({ key, analytics: data })),
+    select: (data) => cached || data,
   });
 };

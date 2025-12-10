@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   logsByDate: {},
+  rangeCache: {},
+  analyticsCache: {},
 };
 
 const logSlice = createSlice({
@@ -17,8 +19,16 @@ const logSlice = createSlice({
       if (!state.logsByDate[date]) state.logsByDate[date] = {};
       state.logsByDate[date][habitId] = value;
     },
+    setLogsByRange(state, action) {
+      const { key, logs } = action.payload;
+      state.rangeCache[key] = logs;
+    },
+    setAnalyticsByRange(state, action) {
+      const { key, analytics } = action.payload;
+      state.analyticsCache[key] = analytics;
+    }
   },
 });
 
-export const { setLogsByDate, updateSingleLog } = logSlice.actions;
+export const { setLogsByDate, updateSingleLog,setLogsByRange,setAnalyticsByRange } = logSlice.actions;
 export default logSlice.reducer;

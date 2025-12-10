@@ -11,23 +11,32 @@ import {
 } from "@/app/hooks/habitLogAPI/logQuery";
 import { useDeleteHabit } from "@/app/hooks/habitAPI/habitQuery";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
-import { setEditHabitData,setSideBarToggle } from "@/ReduxToolkit/Reducers/Layout/LayoutReducer";
+import {
+  setEditHabitData,
+  setSideBarToggle,
+} from "@/ReduxToolkit/Reducers/Layout/LayoutReducer";
 export default function SideBarLog({ logs = [], isLoading, date }) {
   if (isLoading) return <div>Loading habits...</div>;
   if (logs?.length === 0) return <div>No habits today.</div>;
 
   return (
-    <>
+    <div
+      className="p-2"
+      style={{
+        border: "1px solid var(--surface-border)",
+        borderRadius: "var(--rem-4)",
+      }}
+    >
       {logs.map((log, i) => (
         <SingleHabitLog key={log._id || i} habit={log} dayIndex={i} />
       ))}
-    </>
+    </div>
   );
 }
 
 function SingleHabitLog({ habit = {}, dayIndex }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const dispatch=useAppDispatch();
+  const dispatch = useAppDispatch();
   const completeHabit = useCompleteHabit();
   const uncompleteHabit = useUncompleteHabit();
   const deleteHabit = useDeleteHabit();
@@ -35,6 +44,7 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
     return null;
   }
 
+  const logDay = new Date(habit.date).getDay();
   const isInactive = !habit?.weekFrequency[new Date(habit?.date)?.getDay()];
   const isPositive = habit?.isPositiveHabit;
   const isCompleted = habit?.isCompleted;
@@ -47,9 +57,17 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
   }, [habit._id, habit.date, isCompleted]);
 
   return (
-    <div className="sidebar-log" style={{ color: isInactive ? "#a0aec0" : "" }}>
+    <div
+      className="sidebar-log"
+      style={{ color: isInactive ? "var(--surface-secondary)" : "" }}
+    >
       {/* Icon */}
-      <div className="status-icon" style={{ color: habit.palette }}>
+      <div
+        className="status-icon"
+        style={{
+          color: isInactive ? "var(--surface-secondary)" : habit.palette,
+        }}
+      >
         {isPositive ? <FaCircle size={18} /> : <RiCloseFill size={25} />}
       </div>
 
@@ -57,7 +75,9 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
       {!isCompleted && (
         <div
           className="pending-line"
-          style={{ height: "100%", background:habit.palette }}
+          style={{
+            background: isInactive ? "var(--surface-secondary)" : habit.palette,
+          }}
         />
       )}
 
@@ -75,11 +95,20 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
         {/* Text Content */}
         <div
           className="habit-content"
-          style={{ color: isCompleted ? "white" : "black" }}
+          style={{
+            color: isCompleted ? "var(--gray-50)" : "var(--text-primary)",
+          }}
         >
           {/* Title Row */}
           <div className="space-between">
-            <h4>{habit.habitName}</h4>
+            <h4
+              style={{
+                color: isInactive ? "var(--text-inactive)" : "",
+                fontWeight: "400",
+              }}
+            >
+              {habit.habitName}
+            </h4>
 
             <div className="habit-actions">
               {habit?.streak > 0 && (
@@ -92,7 +121,19 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
                 className="position-relative"
                 onClick={() => setMenuOpen((prev) => !prev)}
               >
-                {menuOpen ? <RiCloseFill /> : <SlOptionsVertical />}
+                {menuOpen ? (
+                  <RiCloseFill
+                    color={
+                      isCompleted ? "var(--gray-50)" : "var(--text-secondary)"
+                    }
+                  />
+                ) : (
+                  <SlOptionsVertical
+                    color={
+                      isCompleted ? "var(--gray-50)" : "var(--text-secondary)"
+                    }
+                  />
+                )}
               </div>
               <div
                 className="dropdown-menu"
@@ -108,7 +149,7 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
                     dispatch(setSideBarToggle(true)); // open sidebar
                     setMenuOpen(false);
                   }}
-                  >
+                >
                   Edit
                 </button>
 
@@ -137,9 +178,11 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
                 </button>
               </div>
             ) : isInactive ? (
-              <div className="text-muted">Inactive on {dayNames[dayIndex]}</div>
+              <div style={{ color: "var(--text-inactive)" }}>
+                Inactive on {dayNames[logDay]}
+              </div>
             ) : (
-              <button className="w-100 complete-btn" onClick={toggleStatus}>
+              <button className="w-100 rmv-btn-style complete-btn" onClick={toggleStatus}>
                 {isPositive ? "Mark Complete" : "Mark Avoided"}
               </button>
             )}

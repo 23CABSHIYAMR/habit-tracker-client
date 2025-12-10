@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { habitService } from "@/app/services/api/habitService";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setHabits } from "@/ReduxToolkit/Reducers/Habit/HabitReducer";
 
 export const useGetHabits = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
+  console.log("query called")
   return useQuery({
     queryKey: ["habits"],
     queryFn: habitService.getHabits,

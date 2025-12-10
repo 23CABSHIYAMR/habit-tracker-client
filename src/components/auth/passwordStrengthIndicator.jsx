@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import zxcvbn from "zxcvbn";
-
+import { STRENGTH } from "@/constants";
 const strengthLabels = ["Weak", "Fair", "Good", "Strong"];
 const strengthColors = [
-  "var(--fg-fg-error-secondary)",
-  "var(--fg-fg-warning-secondary)",
-  "var(--fg-fg-success-secondary)",
-  "var(--fg-fg-success-primary)",
+  STRENGTH.POOR,
+  STRENGTH.WEAK,
+  STRENGTH.GOOD,
+  STRENGTH.STRONG,
 ];
 
 export default function PasswordStrengthIndicator({
@@ -44,7 +44,7 @@ export default function PasswordStrengthIndicator({
                 key={i}
                 className="bar"
                 style={{
-                  background: i <= score ? strengthColors[score] : "#E4E7EC",
+                  background: i <= score ? strengthColors[score] : "var(--gray-250)",
                 }}
               ></span>
             ))}

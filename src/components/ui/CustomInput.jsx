@@ -53,15 +53,17 @@ const InputField = ({
         {/* Password Eye Toggle */}
         {isPassword && value && (
           <span
-            className="position-absolute top-50 end-0 translate-middle-y me-3"
+            className="position-absolute top-50 end-0 translate-middle-y me-3 icon-container-size"
             style={{ cursor: "pointer" }}
             onClick={() => setShowPassword(!showPassword)}
           >
             <Image
-              src={`/assets/images/toggleable/${showPassword ? "eye-on" : "eye-off"}.svg`}
+              src={`/assets/images/toggleable/${
+                showPassword ? "eye-on" : "eye-off"
+              }.svg`}
+              alt="toggle-password"
               width={20}
               height={20}
-              alt="toggle-password"
             />
           </span>
         )}

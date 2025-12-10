@@ -1,22 +1,5 @@
 import moment from "moment";
 
-export const getColorFromText = (text) => {
-  const colors = [
-    "#1abc9c",
-    "#3498db",
-    "#9b59b6",
-    "#f39c12",
-    "#e74c3c",
-    "#2ecc71",
-    "#e67e22",
-  ];
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    hash = text.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return colors[Math.abs(hash) % colors.length];
-};
-
 export const formatToLocalDate24 = (date) => {
   if (!date) return "";
 

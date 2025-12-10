@@ -3,6 +3,7 @@ import api from "@/app/(MainBody)/api/apiInstance";
 export const habitService = {
   getHabits: async () => {
     const res = await api.get("/habits");
+    console.log(res.data)
     return res.data;
   },
 

@@ -3,33 +3,35 @@ import { useState } from "react";
 import CustomInput from "@/components/ui/CustomInput";
 import { dayNames, ColorPalette } from "@/constants/index";
 
-export default function HabitForm({ formData, setFormData, errors, setErrors }) {
-
+export default function HabitForm({
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+}) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const toggleDay = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      weekFrequency: prev.weekFrequency.map((v, i) =>
-        i === index ? !v : v
-      ),
+      weekFrequency: prev.weekFrequency.map((v, i) => (i === index ? !v : v)),
     }));
   };
 
   const setWeekdays = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       weekFrequency: [false, true, true, true, true, true, false],
     }));
   };
 
   const setEveryday = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       weekFrequency: [true, true, true, true, true, true, true],
     }));
@@ -38,7 +40,6 @@ export default function HabitForm({ formData, setFormData, errors, setErrors }) 
   // ----------------------- UI -----------------------
   return (
     <div className="flex flex-col gap-4">
-
       {/* HABIT NAME */}
       <div>
         <label className="form-label">Habit Name*</label>
@@ -63,7 +64,7 @@ export default function HabitForm({ formData, setFormData, errors, setErrors }) 
               value="true"
               checked={formData.isPositiveHabit === true}
               onChange={() =>
-                setFormData(prev => ({ ...prev, isPositiveHabit: true }))
+                setFormData((prev) => ({ ...prev, isPositiveHabit: true }))
               }
             />
             To-Do
@@ -76,7 +77,7 @@ export default function HabitForm({ formData, setFormData, errors, setErrors }) 
               value="false"
               checked={formData.isPositiveHabit === false}
               onChange={() =>
-                setFormData(prev => ({ ...prev, isPositiveHabit: false }))
+                setFormData((prev) => ({ ...prev, isPositiveHabit: false }))
               }
             />
             Not-To-Do
@@ -120,20 +121,19 @@ export default function HabitForm({ formData, setFormData, errors, setErrors }) 
       {/* PALETTE */}
       <div>
         <label className="form-label">Color Palette</label>
-        <div className="flex items-center gap-3">
+        <div className="center-items justify-content-start gap-2">
           {ColorPalette.map((c, index) => (
             <button
               key={index}
               type="button"
-              className={`rounded-full transition-all ${
-                formData.palette === c ? "w-8 h-8" : "w-6 h-6"
-              }`}
+              className="rmv-btn-style habit-color-btn"
               style={{
                 background: c,
-                border: formData.palette === c ? `4px solid ${c}` : "none",
+                boxShadow:
+                  formData.palette === c ? `0px 0px 0px 3px ${c}` : "none",
               }}
               onClick={() =>
-                setFormData(prev => ({
+                setFormData((prev) => ({
                   ...prev,
                   palette: c,
                 }))

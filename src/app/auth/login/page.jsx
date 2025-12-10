@@ -1,17 +1,18 @@
 "use client";
 
-import { useLogin } from "@/app/hooks/auth/login/useAuth";
-import { setToken } from "@/app/services/auth/authService";
+import { useLogin } from "@/app/hooks/authAPI/useAuth";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Button, Form } from "reactstrap";
 import Footer from "@/components/auth/Footer";
 import InputField from "@/components/ui/CustomInput";
-import { MailIcon, LockIcon } from "@/components/svg-icons/SvgIcons";
-
+import { MailIcon, LockIcon } from "@/components/ui/SvgIcons";
+import { useAppDispatch } from "@/ReduxToolkit/hooks";
+import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 const Login = () => {
   const router = useRouter();
   const { mutate: login, isPending } = useLogin();
+  const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -64,12 +65,9 @@ const Login = () => {
     if (!valid) return;
 
     login(formData, {
-      onSuccess: async (res) => {
-        if (res?.status === 200) {
-          const response = await setToken(res?.data?.token);
-          sessionStorage.setItem("userDetails", JSON.stringify(res?.data?.user));
-          router.push("/week");
-        }
+      onSuccess: async (response) => {
+        dispatch(setUser(response?.data?.user))
+        router.push("/week");
       },
       onError: (error) => {
         setErrors((prev) => ({
@@ -78,7 +76,6 @@ const Login = () => {
         }));
 
         if (error?.status === 401) {
-          sessionStorage.setItem("email", formData.email);
           router.push("/auth/login");
         }
       },

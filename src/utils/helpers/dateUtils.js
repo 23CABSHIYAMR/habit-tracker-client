@@ -34,11 +34,11 @@ export function getWeekRange(sunday) {
   return days;
 }
 
-export function getWeekStart() {
-  const today = new Date();
-  const sunday = new Date(today);
-  sunday.setDate(today.getDate() - today.getDay());
-  return sunday;
+export function getWeekStart(date = new Date()) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(d.setDate(diff));
 }
 
 export function changeDate(offset, prevDate) {
@@ -53,7 +53,7 @@ export function changeYear(offset, prevDate) {
   return newDate;
 }
 
-export function yearFormat(date,createdDate) {
+export function yearFormat(date, createdDate) {
   const prevYear = new Date(date);
   const thisYear = new Date();
   prevYear.setFullYear(
@@ -95,6 +95,9 @@ export function generateMonthDates(monthKey) {
     allDates.push(start.getDate());
   }
 
-  while (endDay % 7 !== 0) {allDates.push(0);endDay++;}
+  while (endDay % 7 !== 0) {
+    allDates.push(0);
+    endDay++;
+  }
   return allDates;
 }

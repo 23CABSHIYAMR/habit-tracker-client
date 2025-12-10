@@ -1,44 +1,62 @@
 "use client";
-
+//redux
 import { useAppDispatch, useAppSelector } from "@/ReduxToolkit/hooks";
 import {
   setSideBarToggle,
   setEditHabitData,
 } from "@/ReduxToolkit/Reducers/Layout/LayoutReducer";
 import { nextDate, prevDate } from "@/ReduxToolkit/Reducers/Date/dateSlice";
-import Image from "next/image";
-import Header from "@/components/layout/header/Header";
-import SideBarLog from "@/components/SideBarLog";
-import CommonSideBarOffcanvas from "@/components/ui/CommonSideBarOffCanvas";
-import HabitForm from "@/components/habits/HabitForm";
+import ImgInBtn from "@/components/ui/ImgInBtn";
 
+//components
+import Header from "@/components/layout/Header";
+import TopBar from "@/components/layout/TopBar";
+import SideBarLog from "@/components/layout/SideBarLog";
+import CommonSideBarOffcanvas from "@/components/sideBarModal/CommonSideBarOffCanvas";
+import HabitForm from "@/components/sideBarModal/HabitForm";
+import SessionHydrator from "@/utils/auth/SessionHydrator";
+//services & helpers
 import {
   useCreateHabit,
   useUpdateHabit,
 } from "@/app/hooks/habitAPI/habitQuery";
 import { useGetLogsByDate } from "@/app/hooks/habitLogAPI/logQuery";
 import { IsoDate } from "@/utils/helpers/dateFormat";
-
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useLogout } from "../hooks/authAPI/useAuth";
 
 import { useState, useEffect } from "react";
-import { deleteToken } from "../services/auth/authService";
 import { useRouter } from "next/navigation";
+import { clearUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
+
 const defaultFormData = {
   habitName: "",
   isPositiveHabit: true,
   weekFrequency: [true, true, true, true, true, true, true],
-  palette: "#155EEF",
+  palette: "var(--habit-1)",
 };
 
 export default function Layout({ children }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { mutate: logout } = useLogout();
+
   const isSidebarOpen = useAppSelector((state) => state.layout.sideBarToggle);
   const editHabit = useAppSelector((state) => state.layout.editHabitData);
-
+  const userDetails = useAppSelector((state) => state.auth.user);
   const selectedDate = useAppSelector((state) => state.date.selectedDate);
+  const [canMvFwd, setCanMvFwd] = useState(false);
+  const [canMvBwd, setCanMvBwd] = useState(true);
 
+  useEffect(() => {
+    const today = new Date();
+    const userCreatedAt=new Date(userDetails?.createdAt);
+
+    const selected = new Date(selectedDate);
+    const todayOnly = today.setHours(0, 0, 0, 0);
+    const selectedOnly = selected.setHours(0, 0, 0, 0);
+    setCanMvFwd(selectedOnly < todayOnly);
+    setCanMvBwd(userCreatedAt<=selectedOnly);
+  }, [selectedDate]);
   const {
     data: logsForDate,
     isLoading,
@@ -108,85 +126,85 @@ export default function Layout({ children }) {
     }
   };
 
-  const logoutUser= async() =>{
-    const response= await deleteToken();
-    console.log("Logged out successfully");
-    router.push("/auth/login")
-  }
+  const logoutUser = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        router.push("/auth/login");
+        dispatch(clearUser());
+      },
+    });
+  };
 
   return (
-    <>
-      <div className="w-100 p-1">
-        <button
-        className="rmv-btn-style circle-border p-1"
-        onClick={logoutUser}
-        >
-          <Image
-            src={"/assets/images/topBar/logout.svg"}
-            alt={"logout"}
-            width={24}
-            height={24}
-          />
-        </button>
-      </div>
-      <div className="main-grid">
-        {/* LEFT SIDE */}
-        <div className="left-area">
-          <Header />
+    <SessionHydrator>
+      <>
+        <TopBar logoutUser={logoutUser} />
+        <div className="main-grid">
+          <div className="left-area">
+            <Header userDetails={userDetails} />
 
-          {/* ---- MAIN PAGE CONTENT ---- */}
-          <div className="main-content">{children}</div>
-        </div>
-
-        {/* RIGHT SIDEBAR */}
-        <div className="sidebar-area">
-          {/* ---- DATE HEADER + CHEVRONS ---- */}
-          <div className="date-nav my-3 d-flex justify-content-between align-items-center">
-            <h3 className="fw-light">{selectedDate.toDateString()}</h3>
-
-            <div className="d-flex gap-3">
-              <IoIosArrowBack
-                className="chevron-btn"
-                onClick={() => dispatch(prevDate())}
-              />
-              <IoIosArrowForward
-                className="chevron-btn"
-                onClick={() => dispatch(nextDate())}
-              />
+            {/* ---- MAIN PAGE CONTENT ---- */}
+            <div className="main-content d-flex flex-column gap-4">
+              {children}
             </div>
           </div>
-          <SideBarLog
-            isLoading={isLoading}
-            logs={logsForDate || []}
-            date={selectedDate}
-          />
-        </div>
-      </div>
 
-      {/* ---- ADD HABIT OFFCANVAS ---- */}
-      <CommonSideBarOffcanvas
-        isOpen={isSidebarOpen}
-        toggle={() => dispatch(setSideBarToggle(false))}
-        headerTitle={editHabit ? "Edit Habit" : "Add Habit"}
-        headerSubTitle={
-          editHabit ? "Update your habit details" : "Tackle your goals daily"
-        }
-        bodyContent={
-          <HabitForm
-            formData={formData}
-            setFormData={setFormData}
-            errors={errors}
-            setErrors={setErrors}
-          />
-        }
-        primaryBtnTxt={editHabit ? "Save Changes" : "Add Habit"}
-        secondaryBtnTxt="Cancel"
-        primaryAction={handleSubmit}
-        secondaryAction={() => {
-          dispatch(setEditHabitData(null));
-          dispatch(setSideBarToggle(false));
-        }}
-      />
-    </>
+          {/* RIGHT SIDEBAR */}
+          <div className="sidebar-area">
+            {/* ---- DATE HEADER + CHEVRONS ---- */}
+            <div className="date-nav my-3 d-flex justify-content-between align-items-center">
+              <h3 className="fw-light">{selectedDate.toDateString()}</h3>
+
+              <div className="d-flex gap-3">
+                <ImgInBtn
+                  className={`chevron-btn ${
+                    canMvBwd ? "" : "chevron-disabled"
+                  }`}
+                  dir="arrowsAndChevrons/chevron-left.svg"
+                  clickEvent={() =>canMvBwd && dispatch(prevDate())}
+                />
+                <ImgInBtn
+                  className={`chevron-btn ${
+                    canMvFwd ? "" : "chevron-disabled"
+                  }`}
+                  dir="arrowsAndChevrons/chevron-right.svg"
+                  clickEvent={() => canMvFwd && dispatch(nextDate())}
+                />
+              </div>
+            </div>
+            <SideBarLog
+              isLoading={isLoading}
+              logs={logsForDate || []}
+              date={selectedDate}
+            />
+          </div>
+        </div>
+
+        {/* ---- ADD HABIT OFFCANVAS ---- */}
+        <CommonSideBarOffcanvas
+          isOpen={isSidebarOpen}
+          toggle={() => dispatch(setSideBarToggle(false))}
+          headerTitle={editHabit ? "Edit Habit" : "Add Habit"}
+          headerSubTitle={
+            editHabit ? "Update your habit details" : "Tackle your goals daily"
+          }
+          bodyContent={
+            <HabitForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              setErrors={setErrors}
+            />
+          }
+          primaryBtnTxt={editHabit ? "Save Changes" : "Add Habit"}
+          secondaryBtnTxt="Cancel"
+          primaryAction={handleSubmit}
+          secondaryAction={() => {
+            dispatch(setEditHabitData(null));
+            dispatch(setSideBarToggle(false));
+          }}
+        />
+      </>
+    </SessionHydrator>
   );
 }

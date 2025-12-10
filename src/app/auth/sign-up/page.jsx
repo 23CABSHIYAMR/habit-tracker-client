@@ -1,21 +1,20 @@
 "use client";
 
-import { useSignUp } from "@/app/hooks/auth/sign-up/useSignUp";
+import { useSignUp } from "@/app/hooks/authAPI/useAuth";
 import Footer from "@/components/auth/Footer";
 import InputField from "@/components/ui/CustomInput";
-import { MailIcon, LockIcon, UserIcon } from "@/components/svg-icons/SvgIcons";
+import { MailIcon, LockIcon, UserIcon } from "@/components/ui/SvgIcons";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Form, Button } from "reactstrap";
 import PasswordStrengthIndicator from "@/components/auth/passwordStrengthIndicator";
-import { setToken } from "@/app/services/auth/authService";
-
+import { useAppDispatch } from "@/ReduxToolkit/hooks";
+import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 const SignUp = () => {
   const router = useRouter();
   const { mutate: signUp, isPending } = useSignUp();
-
+  const dispatch=useAppDispatch();
   // ---------------- FORM DATA ----------------
   const [formData, setFormData] = useState({
     fullName: "",
@@ -86,13 +85,8 @@ const SignUp = () => {
 
     signUp(body, {
       onSuccess: async (res) => {
-        console.log(res);
         if (res?.status === 201) {
-          const response = await setToken(res?.data?.token);
-          sessionStorage.setItem(
-            "userDetails",
-            JSON.stringify(res?.data?.user)
-          );
+          dispatch(setUser(res.data?.user))
           router.push("/week");
         }
       },
@@ -148,9 +142,7 @@ const SignUp = () => {
             leftIcon={<LockIcon />}
           />
           <PasswordStrengthIndicator value={formData.password} />
-          <label
-            className="w-100 d-flex gap-2"
-          >
+          <label className="w-100 d-flex gap-2">
             <input
               type="checkbox"
               checked={formData.acceptTermsAndPolicy}
@@ -160,7 +152,7 @@ const SignUp = () => {
                   acceptTermsAndPolicy: e.target.checked,
                 }))
               }
-              style={{ width: "16px", height: "16px" ,marginTop:"5px"}} // hide default checkbox
+              style={{ width: "16px", height: "16px", marginTop: "5px" }} // hide default checkbox
               required
             />
             <span className="terms-privacy p-0">

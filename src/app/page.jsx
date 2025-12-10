@@ -1,11 +1,10 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getToken } from "./services/auth/authService";
 
-export default function Home() {
-  const token = getToken();
-
+export default async function Home() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  console.log("home-page redirection",token)
   if (token) redirect("/week");
-  else redirect("/auth/sign-up");
-
-  return null;
+  return redirect("/auth/sign-up");
 }

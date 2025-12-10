@@ -29,7 +29,7 @@ export default function Footer({ isLogin = false }) {
           padding: "10px 16px",
           borderRadius: "30px",
           borderWidth: "1px",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--gray-50)",
           opacity: 1,
           color: "var(--text-primary)",
         }}

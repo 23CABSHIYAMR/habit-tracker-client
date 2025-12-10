@@ -1,5 +1,6 @@
 .sidebar-log {
   display: flex;
+  gap: var(--rem-2);
   padding: 0.75rem;
   font-size: 1rem;
   align-items: stretch;
@@ -10,17 +11,17 @@
   }
 
   .pending-line {
-    width:3px;
-    height:100% !important;
-    border:1px solid black;
+    width: 5px;
+    border-radius: var(--rem-40);
+    height: 100% !important;
     align-self: stretch;
-     flex-shrink: 0; 
+    min-height: 105px;
   }
 
   .habit-container {
     position: relative;
     width: 100%;
-    border-radius: 1rem;
+    border-radius: var(--rem-16);
     overflow: hidden;
   }
 
@@ -40,8 +41,6 @@
     gap: 0.75rem;
   }
 
-
-
   .habit-actions {
     display: flex;
     align-items: center;
@@ -50,36 +49,42 @@
   }
 
   .dropdown-menu {
-  position: absolute;
-  top: 24px;
-  right: 0;
-  border-radius: 6px;
-  padding: 0;
-  background: none;
-  display: flex;
-  flex-direction: column;
-  transition: opacity 0.2s ease;
-  z-index: 9999;
-}
-  .delete-btn, .edit-btn{
-    background: var(--bg-bg-primary);
-    color:var(--text-secondary);
+    position: absolute;
+    top: 24px;
+    right: 0;
+    border-radius: var(--rem-8);
+    padding: 0;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+  }
+
+  .delete-btn,
+  .edit-btn {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
     padding: 2px 8px;
-    border-bottom: 1px solid var(--border-btn);
+    border-bottom: 1px solid var(--btn-border);
   }
-  .delete-btn:active, .edit-btn:active{
-    background: var(--bg-bg-secondary);
+
+  .delete-btn:active,
+  .edit-btn:active {
+    background: var(--bg-secondary);
   }
-  .complete-btn:focus,.complete-btn:active{
-  background: none;
-}
-.complete-btn{
-  border: 1px solid var(--border-btn);
-  color:var(--text-btn);
-  padding:var(--rem-4);
-  background: none;
-  border-radius: var(--rem-8);
-  font-size: larger;
-  font-weight: 600;
-}
+
+  .complete-btn:focus,
+  .complete-btn:active {
+    background: none;
+  }
+
+  .complete-btn {
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text-primary);
+    padding: var(--rem-4);
+    border-radius: var(--rem-8);
+    font-size: larger;
+    font-weight: 600;
+  }
 }

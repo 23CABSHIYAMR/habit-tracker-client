@@ -1,86 +1,51 @@
 "use client";
 
-import { setToken } from "@/app/services/auth/authService";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "@/ReduxToolkit/hooks";
+import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
+import api from "@/app/(MainBody)/api/apiInstance";
 
-const OAuth = () => {
+export default function OAuth() {
   const router = useRouter();
-  const [showCheckmark, setShowCheckmark] = useState(false);
-  const [count, setCount] = useState(2);
-  const [token, setTokenValue] = useState(null);
-  const [error, setError] = useState(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    let mounted = true;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get("token");
-    const errorParam = urlParams.get("error");
+    (async () => {
+      try {
+        const res = await api.get("/auth/me", { withCredentials: true });
 
-    if (tokenParam) setTokenValue(tokenParam);
-    if (errorParam) setError(errorParam);
-  }, []);
+        if (!mounted) return;
 
-  useEffect(() => {
-    if (token) {
-      (async () => {
-        await setToken(token);
-        setShowCheckmark(true);
-      })();
-    } else if (error) {
-      toast.error("Authentication failed. Please try again.");
-      router.push("/auth/login");
-    }
-  }, [token, error, router]);
+        dispatch(setUser(res.data));
+        router.replace("/week");
+      } catch {
+        toast.error("Authentication failed, please log in again.");
+        router.replace("/auth/login");
+      }
+    })();
 
-  useEffect(() => {
-    if (!token) return;
-    if (count <= 0) {
-      window.location.href = "/week";
-      return;
-    }
-    const timer = setTimeout(() => setCount((prev) => prev - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [count, token, router]);
-
-  if (!token) return null;
+    return () => {
+      mounted = false;
+    };
+  }, [router, dispatch]);
 
   return (
     <div className="center-items-col gap-4">
-      <>
       <h1 className="auth-title">
         <Image
-          src={
-            showCheckmark
-              ? "/assets/images/toggleable/checked.svg"
-              : "/assets/images/toggleable/unchecked.svg"
-            }
-          width={28}
-          height={28}
+          src="/assets/images/toggleable/checked.svg"
+          width={30}
+          height={30}
           alt="status"
-          />
+        />
         Welcome
       </h1>
-      <h4 className="auth-sub-title">Authentication successful!</h4>
-      </>
-      <a
-        className="space-between"
-        href="/auth/login"
-        style={{ textDecoration: "none", color: "var(--text-primary)" }}
-      >
-        <p className="m-0">Redirecting to Dashboard in {count}s...</p>
-        <Image
-          src="/assets/images/arrowsAndChevrons/arrow-right.svg"
-          alt="arrow-right"
-          width={20}
-          height={20}
-        />
-      </a>
+      <h4 className="auth-sub-title">Authentication successful! Redirecting...</h4>
     </div>
   );
-};
-
-export default OAuth;
+}

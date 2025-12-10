@@ -2,21 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import GreetingCol from "@/components/GreetingCol";
+import GreetingCol from "@/components/layout/GreetingCol";
 import { navItems, getCurrentIndex } from "@/constants";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setSideBarToggle } from "@/ReduxToolkit/Reducers/Layout/LayoutReducer";
 import { useState, useEffect } from "react";
-
-export default function Header() {
+import { BiPlusMedical } from "react-icons/bi";
+import { AddIcon } from "@/components/ui/SvgIcons";
+export default function Header({ userDetails = {} }) {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
-  
-  const [userDetails, setUserDetails] = useState({});
-  useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("userDetails"));
-    if (user) setUserDetails(user);
-  }, []);
 
   const activeIndex = getCurrentIndex(pathName);
 
@@ -24,7 +19,7 @@ export default function Header() {
     <div className="header-area">
       <GreetingCol userDetails={userDetails} />
 
-      <div className="space-between gap-4">
+      <div className="space-between gap-1">
         <nav className="top-nav">
           <div
             className="pill"
@@ -46,7 +41,7 @@ export default function Header() {
           className="rmv-btn-style add-habit-btn"
           onClick={() => dispatch(setSideBarToggle(true))}
         >
-          + Add Habit
+          <AddIcon /> Add Habit
         </button>
       </div>
     </div>
