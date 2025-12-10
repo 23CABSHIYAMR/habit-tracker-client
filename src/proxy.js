@@ -7,46 +7,48 @@ export async function proxy(request) {
   // --- AUTH GUARD ---
   const token = request.cookies.get("token")?.value;
   const isAuthPage = path.startsWith("/auth");
-  const isOAuthCallback = path.startsWith("/auth/oauth");
+  const isOAuth = path.startsWith("/auth/oauth");
 
-  if (!isOAuthCallback) {
+  if (!isOAuth) {
     if (token && isAuthPage) {
       return NextResponse.redirect(new URL("/week", request.url));
     }
 
-    if (!token &&
-        !isAuthPage &&
-        ["/week", "/month", "/year", "/all-time"].includes(path)) {
+    const protectedRoutes = ["/week", "/month", "/year", "/all-time"];
+
+    if (!token && protectedRoutes.includes(path)) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
-  // --- PROXY: /server → backend ---
+  // --- API PROXY ---
   if (path.startsWith("/server/")) {
     const backend = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-    // Reconstruct URL WITHOUT "/server"
     const targetPath = path.replace("/server", "");
     const targetUrl = backend + targetPath + url.search;
 
-    // Forward request to backend, INCLUDING cookies
+    // Forward headers
+    const headers = new Headers(request.headers);
+    headers.set("host", new URL(backend).host);
+
     const backendRes = await fetch(targetUrl, {
       method: request.method,
-      headers: {
-        "Content-Type": request.headers.get("Content-Type") || "",
-        Cookie: request.headers.get("Cookie") || "",
-      },
-      body: request.method !== "GET" ? await request.text() : undefined,
+      headers,
       credentials: "include",
+      body: ["GET", "HEAD"].includes(request.method)
+        ? undefined
+        : request.clone().body,
     });
 
-    // Create a response from backend result
-    const response = new NextResponse(backendRes.body, {
+    const responseHeaders = new Headers();
+    backendRes.headers.forEach((value, key) => {
+      responseHeaders.set(key, value);
+    });
+
+    return new NextResponse(backendRes.body, {
       status: backendRes.status,
-      headers: backendRes.headers,
+      headers: responseHeaders,
     });
-
-    return response;
   }
 
   return NextResponse.next();
