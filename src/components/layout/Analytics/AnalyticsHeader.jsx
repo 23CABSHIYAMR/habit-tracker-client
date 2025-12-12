@@ -1,7 +1,7 @@
 "use client";
 import DisplayType from "@/components/ui/DisplayType";
 import ImgInBtn from "@/components/ui/ImgInBtn";
-import ProgressBar from "../ui/ProgressBar";
+import ProgressBar from "../../ui/ProgressBar";
 export default function AnalyticsHeader({
   title,
   dateLabel,
@@ -65,7 +65,7 @@ export default function AnalyticsHeader({
                   } previous period`
                 : " "}
             </div>
-            <div>{(progressVal).toFixed(2)}% achieved</div>
+            <div>{progressVal.toFixed(2)}% achieved</div>
           </div>
         </>
       )}

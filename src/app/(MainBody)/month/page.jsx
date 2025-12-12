@@ -1,6 +1,6 @@
 "use client";
-import AnalyticsPageTemplate from "@/components/layout/AnalyticsPageTemplate";
-import MonthCalendarGrid from "@/components/layout/MonthCalendarGrid"; 
+import AnalyticsPageTemplate from "@/components/layout/Analytics/AnalyticsPageTemplate";
+import MonthCalendarGrid from "@/components/layout/GridDisplay/MonthCalendarGrid"; 
 
 export default function MonthPage() {
   return (

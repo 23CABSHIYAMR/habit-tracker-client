@@ -1,5 +1,5 @@
 "use client";
-import AnalyticsPageTemplate from "@/components/layout/AnalyticsPageTemplate";
+import AnalyticsPageTemplate from "@/components/layout/Analytics/AnalyticsPageTemplate";
 
 export default function YearPage() {
   return (

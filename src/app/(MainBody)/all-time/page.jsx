@@ -1,5 +1,5 @@
 "use client";
-import AnalyticsPageTemplate from "@/components/layout/AnalyticsPageTemplate";
+import AnalyticsPageTemplate from "@/components/layout/Analytics/AnalyticsPageTemplate";
 import {MDYFormat} from "@/utils/helpers/dateFormat"
 import { useAppSelector } from "@/ReduxToolkit/hooks";
 export default function AllTime() {

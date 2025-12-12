@@ -1,7 +1,7 @@
 "use client";
 
-import AnalyticsHeader from "@/components/layout/AnalyticsHeader";
-import AnalyticsChart from "@/components/layout/AnalyticsChart";
+import AnalyticsHeader from "@/components/layout/Analytics/AnalyticsHeader";
+import AnalyticsChart from "@/components/layout/Analytics/AnalyticsChart";
 import { useState, useEffect } from "react";
 import { useGetHabits } from "@/app/hooks/habitAPI/habitQuery";
 import {
@@ -26,7 +26,9 @@ export default function AnalyticsPageTemplate({
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
 
-  const [prevRange, setPrevRange] = useState(getPrevRange(startDate, user || {}));
+  const [prevRange, setPrevRange] = useState(
+    getPrevRange(startDate, user || {})
+  );
   const [nextRange, setNextRange] = useState(getNextRange(startDate));
 
   const [canPrev, setCanPrev] = useState(true);

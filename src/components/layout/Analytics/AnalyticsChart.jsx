@@ -1,5 +1,5 @@
 import React from "react";
-import AnalyticsBar from "@/components/ui/AnalyticsBar";
+import AnalyticsBar from "@/components/layout/Analytics/AnalyticsBar";
 import { FaCircle } from "react-icons/fa6";
 import { RiCloseFill } from "react-icons/ri";
 export default function AnalyticsChart({ analytics, habits }) {
@@ -19,7 +19,7 @@ export default function AnalyticsChart({ analytics, habits }) {
               className="row w-100 m-0 d-flex align-items-center"
             >
               <div
-                className="col-1"
+                className="col-1 p-0"
                 style={{
                   color: habit.palette,
                 }}
@@ -38,7 +38,7 @@ export default function AnalyticsChart({ analytics, habits }) {
                 />
               </div>
 
-              <div className="col-1 text-end">
+              <div className="col-1 text-end p-0">
                 {a.completedHabitsInRange}/{a.habitFreqInRange}
               </div>
             </div>

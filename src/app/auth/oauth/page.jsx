@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import OAuthClient from "./OAuthClient";
 
-export const dynamic = "force-dynamic"; // THIS NOW WORKS
+export const dynamic = "force-dynamic";
 
 export default function Page() {
   return (

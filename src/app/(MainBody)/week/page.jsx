@@ -119,8 +119,8 @@
 //     </div>
 //   );
 // }
-import AnalyticsPageTemplate from "@/components/layout/AnalyticsPageTemplate";
-import WeekGrid from "@/components/layout/WeekGrid"; // custom grid
+import AnalyticsPageTemplate from "@/components/layout/Analytics/AnalyticsPageTemplate";
+import WeekGrid from "@/components/layout/GridDisplay/WeekGrid"; // custom grid
 
 import { getWeekStart, changeDate } from "@/utils/helpers/dateUtils";
 import { WMDFormat } from "@/utils/helpers/dateFormat";

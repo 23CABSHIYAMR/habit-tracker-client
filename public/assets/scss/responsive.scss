@@ -38,8 +38,13 @@
     font-size: 14px !important;
     padding: 10px 40px;
   }
-
-  
+  .top-nav .navItem,.add-habit-btn {
+    font-size: 12px;
+    padding: var(--rem-4);
+  }
+  .add-habit-btn{
+    padding: var(--rem-4);
+  }
 }
 
 /* Extra large screens (1280–1330px) */

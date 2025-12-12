@@ -14,18 +14,22 @@ export default function Header({ userDetails = {} }) {
   const pathName = usePathname();
 
   const activeIndex = getCurrentIndex(pathName);
-
   return (
     <div className="header-area">
       <GreetingCol userDetails={userDetails} />
 
       <div className="space-between gap-1">
-        <nav className="top-nav">
+        <nav className="top-nav position-relative">
+          {/* Sliding Pill */}
           <div
-            className="pill"
-            style={{ transform: `translateX(${activeIndex * 105}%)` }}
-          ></div>
+            className="slider-pill"
+            style={{
+              width: `${100 / navItems.length}%`,
+              transform: `translateX(calc(${activeIndex * 100}% - 4px))`,
+            }}
+          />
 
+          {/* Nav Items */}
           {navItems.map((item, i) => (
             <Link
               key={i}
