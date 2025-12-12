@@ -122,6 +122,7 @@ export default function Layout({ children }) {
             dispatch(setEditHabitData(null));
             dispatch(setSideBarToggle(false));
             resetFormData();
+
           },
         }
       );
@@ -133,6 +134,7 @@ export default function Layout({ children }) {
         },
       });
     }
+    setIsSubmitting(false);
   };
 
   const logoutUser = async () => {
