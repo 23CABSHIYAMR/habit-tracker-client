@@ -71,6 +71,7 @@ export default function Layout({ children }) {
 
   const [formData, setFormData] = useState(defaultFormData);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetFormData = () => {
     setFormData(defaultFormData);
@@ -102,8 +103,10 @@ export default function Layout({ children }) {
   };
 
   const handleSubmit = () => {
+    if(isSubmitting) return;
     if (!validateForm()) return;
 
+    setIsSubmitting(true);
     if (editHabit) {
       updateHabit(
         {
