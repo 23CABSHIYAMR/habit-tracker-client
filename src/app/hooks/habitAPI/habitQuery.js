@@ -5,7 +5,6 @@ import { setHabits } from "@/ReduxToolkit/Reducers/Habit/HabitReducer";
 
 export const useGetHabits = () => {
   const dispatch = useAppDispatch();
-  console.log("query called")
   return useQuery({
     queryKey: ["habits"],
     queryFn: habitService.getHabits,

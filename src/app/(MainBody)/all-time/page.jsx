@@ -1,7 +1,10 @@
 "use client";
 import AnalyticsPageTemplate from "@/components/layout/AnalyticsPageTemplate";
-
+import {MDYFormat} from "@/utils/helpers/dateFormat"
+import { useAppSelector } from "@/ReduxToolkit/hooks";
 export default function AllTime() {
+    const userDetails = useAppSelector((state) => state.auth.user);
+
   return (
     <AnalyticsPageTemplate
       getInitialRange={(createdAt) => ({
@@ -13,7 +16,7 @@ export default function AllTime() {
       allowDisplayToggle={false}
       allowMovement={false}
       showComparison={false}
-      titleFormatter={() => "All-Time Analytics"}
+      titleFormatter={() => MDYFormat(userDetails.createdAt) + " - Till Date"}
     />
   );
 }

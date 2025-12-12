@@ -12,7 +12,7 @@ import PasswordStrengthIndicator from "@/components/auth/passwordStrengthIndicat
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 import { fetchMe } from "@/app/services/auth/authService";
-
+import { setToken } from "@/app/services/auth/authService";
 const SignUp = () => {
   const router = useRouter();
   const { mutate: signUp, isPending } = useSignUp();
@@ -86,10 +86,10 @@ const SignUp = () => {
     };
 
     signUp(body, {
-      onSuccess: async (res) => {
-        if (res?.status === 201) {
-          // const user = await fetchMe();
-          // dispatch(setUser(user));
+      onSuccess: async (response) => {
+        if (response?.status === 201) {
+          const {token} = response.data;
+          await setToken(token);
           router.push("/auth/oauth");
         }
       },

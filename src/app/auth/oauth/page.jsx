@@ -1,27 +1,43 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuthMe } from "@/app/hooks/authAPI/useAuth";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
-import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 import { useEffect } from "react";
+
 export default function OAuth() {
   const router = useRouter();
+  const params = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading } = useAuthMe();
-
   useEffect(() => {
-    if (isLoading) return;
+    const run = async () => {
+      const code = params.get("code");
+      if (!code) return router.replace("/auth/login");
 
-    if (data) {
-      dispatch(setUser(data));
-      router.replace("/week");
-    } else if (error) {
-      router.replace("/auth/login");
-    }
-  }, [data, error, isLoading, dispatch, router]);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/exchange-code`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        }
+      );
+
+      if (!res.ok) return router.replace("/auth/login");
+
+      const { token } = await res.json();
+
+      await fetch("/api/set-token", {
+        method: "POST",
+        body: JSON.stringify({ token }),
+      });
+      
+      router.replace("/auth/success");
+    };
+
+    run();
+  }, [params, router, dispatch]);
 
   return (
     <div className="center-items-col gap-4">
@@ -34,7 +50,9 @@ export default function OAuth() {
         />
         Welcome
       </h1>
-      <h4 className="auth-sub-title">Authentication successful! Redirecting...</h4>
+      <h4 className="auth-sub-title">
+        Authentication successful! Redirecting...
+      </h4>
     </div>
   );
 }

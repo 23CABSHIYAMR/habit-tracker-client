@@ -10,10 +10,10 @@ import { MailIcon, LockIcon } from "@/components/ui/SvgIcons";
 import { useAppDispatch } from "@/ReduxToolkit/hooks";
 import { setUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
 import { fetchMe } from "@/app/services/auth/authService";
+import { setToken } from "@/app/services/auth/authService";
 const Login = () => {
   const router = useRouter();
   const { mutate: login, isPending } = useLogin();
-  const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -66,10 +66,16 @@ const Login = () => {
     if (!valid) return;
 
     login(formData, {
-      onSuccess: async () => {
-    //     const user = await fetchMe();
-    // dispatch(setUser(user));
-        router.push("/auth/oauth");
+      onSuccess: async (response) => {
+        const { token } = response.data;
+        await fetch("/api/set-token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+        router.replace("/auth/oauth");
       },
       onError: (error) => {
         setErrors((prev) => ({

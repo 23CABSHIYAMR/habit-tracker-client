@@ -23,7 +23,7 @@ import {
 import { useGetLogsByDate } from "@/app/hooks/habitLogAPI/logQuery";
 import { IsoDate } from "@/utils/helpers/dateFormat";
 import { useLogout } from "../hooks/authAPI/useAuth";
-
+import { deleteToken } from "../services/auth/authService";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { clearUser } from "@/ReduxToolkit/Reducers/Auth/authSlice";
@@ -48,15 +48,21 @@ export default function Layout({ children }) {
   const [canMvBwd, setCanMvBwd] = useState(true);
 
   useEffect(() => {
-    const today = new Date();
-    const userCreatedAt=new Date(userDetails?.createdAt);
+  if (!userDetails?.createdAt) return;
 
-    const selected = new Date(selectedDate);
-    const todayOnly = today.setHours(0, 0, 0, 0);
-    const selectedOnly = selected.setHours(0, 0, 0, 0);
-    setCanMvFwd(selectedOnly < todayOnly);
-    setCanMvBwd(userCreatedAt<=selectedOnly);
-  }, [selectedDate]);
+  const today = new Date();
+  const selected = new Date(selectedDate);
+  const userCreatedAt = new Date(userDetails.createdAt);
+
+  const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  const selectedOnly = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate()).getTime();
+  const userCreatedOnly = new Date(userCreatedAt.getFullYear(), userCreatedAt.getMonth(), userCreatedAt.getDate()).getTime();
+
+  setCanMvFwd(selectedOnly < todayOnly);
+
+  setCanMvBwd(selectedOnly > userCreatedOnly);
+}, [selectedDate, userDetails?.createdAt]);
+
   const {
     data: logsForDate,
     isLoading,
@@ -126,7 +132,8 @@ export default function Layout({ children }) {
     }
   };
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    await deleteToken();
     logout(undefined, {
       onSuccess: () => {
         router.push("/auth/login");
@@ -161,7 +168,7 @@ export default function Layout({ children }) {
                     canMvBwd ? "" : "chevron-disabled"
                   }`}
                   dir="arrowsAndChevrons/chevron-left.svg"
-                  clickEvent={() =>canMvBwd && dispatch(prevDate())}
+                  clickEvent={() => canMvBwd && dispatch(prevDate())}
                 />
                 <ImgInBtn
                   className={`chevron-btn ${
