@@ -130,7 +130,7 @@ export default function HabitForm({
               style={{
                 background: c,
                 boxShadow:
-                  formData.palette === c ? `0px 0px 0px 3px ${c}` : "none",
+                  formData?.palette === c ? `0px 0px 0px 3px ${c}` : "none",
               }}
               onClick={() =>
                 setFormData((prev) => ({

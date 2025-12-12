@@ -41,7 +41,7 @@ export default function AnalyticsHeader({
               />
             )}
           </div>
-          <h3 className="m-0">{dateLabel ?? title}</h3>
+          <h3 className="m-0 dateLabel">{dateLabel ?? title}</h3>
         </div>
 
         {showDisplayType && (
@@ -57,8 +57,8 @@ export default function AnalyticsHeader({
       {progressVal !== undefined && (
         <>
           <ProgressBar progressVal={progressVal} />
-          <div className="space-between">
-            <div>
+          <div className="space-between progressComparison">
+            <div >
               {showProgressComparison && comparisonValue !== undefined
                 ? `Upto ${Math.abs(comparisonValue).toFixed(2)}% ${
                     comparisonValue >= 0 ? "more than" : "less than"

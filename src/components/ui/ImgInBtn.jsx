@@ -7,11 +7,12 @@ export default function ImgInBtn({
   alt="img"
 }) {
   return (
-    <button onClick={clickEvent} className={`rmv-btn-style circle-border ${className}`}>
+    <button onClick={clickEvent} className={`rmv-btn-style circle-border image-in-btn ${className}`}>
       <Image
         src={`/assets/images/${dir}`}
         width="30"
         height="30"
+        className="img-inside-btn"
         alt={alt}
       />
     </button>

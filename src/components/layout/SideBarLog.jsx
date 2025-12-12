@@ -65,7 +65,7 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
       <div
         className="status-icon"
         style={{
-          color: isInactive ? "var(--surface-secondary)" : habit.palette,
+          color: isInactive ? "var(--surface-secondary)" : habit?.palette,
         }}
       >
         {isPositive ? <FaCircle size={18} /> : <RiCloseFill size={25} />}
@@ -76,7 +76,7 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
         <div
           className="pending-line"
           style={{
-            background: isInactive ? "var(--surface-secondary)" : habit.palette,
+            background: isInactive ? "var(--surface-secondary)" : habit?.palette,
           }}
         />
       )}
@@ -87,14 +87,14 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
         <div
           className="habit-bg"
           style={{
-            backgroundColor: habit.palette,
+            backgroundColor: habit?.palette,
             width: isCompleted ? "100%" : "0%",
           }}
         ></div>
 
         {/* Text Content */}
         <div
-          className="habit-content"
+          className="habit-content "
           style={{
             color: isCompleted ? "var(--gray-50)" : "var(--text-primary)",
           }}
@@ -102,6 +102,7 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
           {/* Title Row */}
           <div className="space-between">
             <h4
+            className="dateLabel"
               style={{
                 color: isInactive ? "var(--text-inactive)" : "",
                 fontWeight: "400",
@@ -170,15 +171,15 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
           <div>
             {isCompleted ? (
               <div className="d-flex justify-content-between p-2">
-                <div>
+                <div className="dateLabel">
                   <FaCheck /> {isPositive ? "Completed" : "Avoided"}
                 </div>
-                <button className="btn p-0 text-white" onClick={toggleStatus}>
+                <button className="btn p-0 text-white dateLabel" onClick={toggleStatus}>
                   Undo
                 </button>
               </div>
             ) : isInactive ? (
-              <div style={{ color: "var(--text-inactive)" }}>
+              <div className="dateLabel" style={{ color: "var(--text-inactive)" }}>
                 Inactive on {dayNames[logDay]}
               </div>
             ) : (

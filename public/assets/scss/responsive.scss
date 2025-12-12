@@ -43,7 +43,30 @@
     padding: var(--rem-4);
   }
   .add-habit-btn{
-    padding: var(--rem-4);
+    padding: var(--rem-8) var(--rem-6);
+  }
+  .greeting, .dateLabel{
+    font-size: var(--rem-16);
+  }
+  .progressComparison{
+    font-size: var(--rem-12);
+  }
+  .complete-btn{
+    font-size: var(--rem-16) !important;
+  }
+  .image-in-btn{
+    width:var(--rem-30);
+    height:var(--rem-30);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .img-inside-btn{
+    width: var(--rem-20);
+    height: var(--rem-20);
+  }
+  .pending-line{
+    height: 65px;
   }
 }
 

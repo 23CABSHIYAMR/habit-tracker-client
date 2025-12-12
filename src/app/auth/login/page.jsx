@@ -146,7 +146,7 @@ const Login = () => {
           <Button
             type="submit"
             disabled={isPending}
-            className="d-flex align-items-center justify-content-center gap-2 w-100"
+            className="d-flex align-items-center justify-content-center gap-2 w-100 auth-btn"
           >
             {isPending ? (
               <>

@@ -48,20 +48,32 @@ export default function Layout({ children }) {
   const [canMvBwd, setCanMvBwd] = useState(true);
 
   useEffect(() => {
-  if (!userDetails?.createdAt) return;
+    if (!userDetails?.createdAt) return;
 
-  const today = new Date();
-  const selected = new Date(selectedDate);
-  const userCreatedAt = new Date(userDetails.createdAt);
+    const today = new Date();
+    const selected = new Date(selectedDate);
+    const userCreatedAt = new Date(userDetails.createdAt);
 
-  const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-  const selectedOnly = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate()).getTime();
-  const userCreatedOnly = new Date(userCreatedAt.getFullYear(), userCreatedAt.getMonth(), userCreatedAt.getDate()).getTime();
+    const todayOnly = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    ).getTime();
+    const selectedOnly = new Date(
+      selected.getFullYear(),
+      selected.getMonth(),
+      selected.getDate()
+    ).getTime();
+    const userCreatedOnly = new Date(
+      userCreatedAt.getFullYear(),
+      userCreatedAt.getMonth(),
+      userCreatedAt.getDate()
+    ).getTime();
 
-  setCanMvFwd(selectedOnly < todayOnly);
+    setCanMvFwd(selectedOnly < todayOnly);
 
-  setCanMvBwd(selectedOnly > userCreatedOnly);
-}, [selectedDate, userDetails?.createdAt]);
+    setCanMvBwd(selectedOnly > userCreatedOnly);
+  }, [selectedDate, userDetails?.createdAt]);
 
   const {
     data: logsForDate,
@@ -83,7 +95,7 @@ export default function Layout({ children }) {
         habitName: editHabit.habitName,
         isPositiveHabit: editHabit.isPositiveHabit,
         weekFrequency: editHabit.weekFrequency,
-        palette: editHabit.palette,
+        palette: editHabit?.palette,
       });
     } else {
       resetFormData();
@@ -103,7 +115,7 @@ export default function Layout({ children }) {
   };
 
   const handleSubmit = () => {
-    if(isSubmitting) return;
+    if (isSubmitting) return;
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -114,7 +126,7 @@ export default function Layout({ children }) {
           updates: {
             habitName: formData.habitName,
             isPositiveHabit: formData.isPositiveHabit,
-            palette: formData.palette,
+            palette: formData?.palette,
           },
         },
         {
@@ -122,7 +134,11 @@ export default function Layout({ children }) {
             dispatch(setEditHabitData(null));
             dispatch(setSideBarToggle(false));
             resetFormData();
-
+            setIsSubmitting(false);
+          },
+          onError: (err) => {
+            console.error("error while updating habit=>", err);
+            setIsSubmitting(false);
           },
         }
       );
@@ -131,10 +147,14 @@ export default function Layout({ children }) {
         onSuccess: () => {
           dispatch(setSideBarToggle(false));
           resetFormData();
+          setIsSubmitting(false);
+        },
+        onError: (err) => {
+          console.error("error while updating habit=>", err);
+          setIsSubmitting(false);
         },
       });
     }
-    setIsSubmitting(false);
   };
 
   const logoutUser = async () => {
@@ -165,7 +185,7 @@ export default function Layout({ children }) {
           <div className="sidebar-area">
             {/* ---- DATE HEADER + CHEVRONS ---- */}
             <div className="date-nav my-3 d-flex justify-content-between align-items-center">
-              <h3 className="fw-light">{selectedDate.toDateString()}</h3>
+              <h3 className="fw-light dateLabel">{selectedDate.toDateString()}</h3>
 
               <div className="d-flex gap-3">
                 <ImgInBtn

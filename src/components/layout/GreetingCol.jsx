@@ -3,7 +3,7 @@ import {setGreeting, bedTimeVariable} from "@/utils/helpers/dateUtils";
 export default function GreetingCol({userDetails}) {
   return (
     <>
-        <h1>Good {setGreeting()}, {userDetails?.userName || "user"}</h1>
+        <h1 className='greeting'>Good {setGreeting()}, {userDetails?.userName || "user"}</h1>
       <p>{bedTimeVariable()}</p>
     </>
   )

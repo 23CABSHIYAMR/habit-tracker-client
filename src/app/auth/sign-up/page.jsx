@@ -167,7 +167,7 @@ const SignUp = () => {
           <Button
             type="submit"
             disabled={isPending}
-            className="center-items gap-2 w-100"
+            className="center-items gap-2 w-100 auth-btn"
           >
             {isPending ? (
               <>
