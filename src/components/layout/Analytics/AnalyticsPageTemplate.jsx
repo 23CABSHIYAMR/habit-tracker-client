@@ -62,8 +62,8 @@ export default function AnalyticsPageTemplate({
 
     const today = new Date();
 
-    setCanNext(nextRange.start <= today);
-    setCanPrev(prevRange.start >= new Date(user?.createdAt));
+    setCanNext(nextRange.start !== null && nextRange.start <= today);
+    setCanPrev(prevRange.end >= new Date(user?.createdAt));
   }, [nextRange, prevRange, allowMovement, user]);
 
   return (
@@ -100,7 +100,7 @@ export default function AnalyticsPageTemplate({
           endDate={endDate}
         />
       ) : (
-        <AnalyticsChart analytics={analytics} habits={habits} />
+        <AnalyticsChart analytics={analytics} habits={habits} dateLabel={titleFormatter(startDate, endDate)} />
       )}
     </>
   );

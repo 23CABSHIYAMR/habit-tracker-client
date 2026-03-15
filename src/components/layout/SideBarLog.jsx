@@ -15,6 +15,7 @@ import {
   setEditHabitData,
   setSideBarToggle,
 } from "@/ReduxToolkit/Reducers/Layout/LayoutReducer";
+import confetti from "canvas-confetti";
 export default function SideBarLog({ logs = [], isLoading, date }) {
   if (isLoading) return <div>Loading habits...</div>;
   if (logs?.length === 0) return <div>No habits today.</div>;
@@ -49,12 +50,29 @@ function SingleHabitLog({ habit = {}, dayIndex }) {
   const isPositive = habit?.isPositiveHabit;
   const isCompleted = habit?.isCompleted;
 
-  const toggleStatus = useCallback(() => {
+  const toggleStatus = useCallback((e) => {
     const payload = { habitId: habit?.habitId, date: habit.date };
-    isCompleted
-      ? uncompleteHabit.mutate(payload)
-      : completeHabit.mutate(payload);
-  }, [habit._id, habit.date, isCompleted]);
+    if (isCompleted) {
+      uncompleteHabit.mutate(payload);
+    } else {
+      completeHabit.mutate(payload);
+      // Trigger confetti from the button's position
+      if (e && e.currentTarget) {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = (rect.left + rect.width / 2) / window.innerWidth;
+          const y = (rect.top + rect.height / 2) / window.innerHeight;
+          
+          confetti({
+            particleCount: 50,
+            spread: 60,
+            origin: { x, y },
+            colors: [habit.palette],
+            disableForReducedMotion: true,
+            zIndex: 9999
+          });
+      }
+    }
+  }, [habit._id, habit.date, habit.palette, isCompleted]);
 
   return (
     <div

@@ -7,6 +7,7 @@ import {
   useGetLogsInRange,
 } from "@/app/hooks/habitLogAPI/logQuery";
 import {isAfterUTC, isSameWeekUTC } from "@/utils/helpers/dateUtils";
+import confetti from "canvas-confetti";
 export default function WeekGrid({ habits = [], startDate, endDate }) {
   const { data: logs = [] } = useGetLogsInRange(
     startDate.toISOString(),
@@ -35,15 +36,15 @@ export default function WeekGrid({ habits = [], startDate, endDate }) {
   const today = new Date(new Date().toISOString().slice(0, 10));
 
   return (
-    <div className="d-grid gap-2">
+    <div className="d-grid gap-4">
       {/* HEADER */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32px 160px repeat(7, 1fr) 70px",
-          fontSize: 12,
-          fontWeight: 600,
-          opacity: 0.7,
+          gridTemplateColumns: "36px minmax(130px, 1.2fr) repeat(7, 1fr) 50px",
+          fontSize: "12px",
+          fontWeight: 400,
+          color: "var(--text-secondary)",
         }}
       >
         <div />
@@ -53,7 +54,7 @@ export default function WeekGrid({ habits = [], startDate, endDate }) {
             {d.toLocaleDateString("en-US", { weekday: "short" })}
           </div>
         ))}
-        <div className="text-end">Done</div>
+        <div className="text-end" />
       </div>
 
       {/* ROWS */}
@@ -66,21 +67,26 @@ export default function WeekGrid({ habits = [], startDate, endDate }) {
             key={h._id}
             style={{
               display: "grid",
-              gridTemplateColumns: "32px 160px repeat(7, 1fr) 70px",
+              gridTemplateColumns: "36px minmax(130px, 1.2fr) repeat(7, 1fr) 50px",
               alignItems: "center",
             }}
           >
             {/* ICON */}
-            <div style={{ color: h.palette }}>
+            <div style={{ color: h.palette, display: "flex", alignItems: "center" }}>
               {h.isPositiveHabit ? (
-                <FaCircle size={16} />
+                <FaCircle size={10} />
               ) : (
-                <RiCloseFill size={22} />
+                <RiCloseFill size={18} />
               )}
             </div>
 
             {/* NAME */}
-            <div className="text-truncate">{h.habitName}</div>
+            <div 
+              className="text-truncate"
+              style={{ color: "var(--text-primary)", fontWeight: 400, fontSize: "15px" }}
+            >
+              {h.habitName}
+            </div>
 
             {/* DAYS */}
             {days.map((d) => {
@@ -98,24 +104,38 @@ export default function WeekGrid({ habits = [], startDate, endDate }) {
               return (
                 <div
                   key={key}
-                  onClick={() => {
-                    console.log("Clicked",active,isSameWeekUTC(d, today),!isAfterUTC(d, today))
+                  onClick={(e) => {
                     if (!editable) return;
-                    completed
-                      ? uncompleteHabit({
+                    if (completed) {
+                      uncompleteHabit({
                           habitId: h._id,
                           date: d.toISOString(),
-                        })
-                      : completeHabit({
+                      });
+                    } else {
+                      completeHabit({
                           habitId: h._id,
                           date: d.toISOString(),
-                        });
+                      });
+                      
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = (rect.left + rect.width / 2) / window.innerWidth;
+                      const y = (rect.top + rect.height / 2) / window.innerHeight;
+                      
+                      confetti({
+                        particleCount: 40,
+                        spread: 50,
+                        origin: { x, y },
+                        colors: [h.palette],
+                        disableForReducedMotion: true,
+                        zIndex: 9999
+                      });
+                    }
                   }}
                   style={{
-                    height: 22,
-                    width: 22,
+                    height: 28,
+                    width: 28,
                     margin: "0 auto",
-                    borderRadius: 4,
+                    borderRadius: 8,
                     backgroundColor: completed
                       ? h.palette
                       : "var(--surface-secondary)",
@@ -127,8 +147,8 @@ export default function WeekGrid({ habits = [], startDate, endDate }) {
             })}
 
             {/* SUMMARY */}
-            <div className="text-end">
-              {completedCount}/{expectedCount}
+            <div className="text-end" style={{ color: "var(--text-inactive)", fontSize: "12px", fontWeight: 500 }}>
+              {completedCount} / {expectedCount}
             </div>
           </div>
         );
