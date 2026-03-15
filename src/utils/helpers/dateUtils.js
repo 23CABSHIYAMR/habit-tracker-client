@@ -101,3 +101,27 @@ export function generateMonthDates(monthKey) {
   }
   return allDates;
 }
+export const startOfWeekUTC = (date) => {
+  const d = new Date(Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate()
+  ));
+
+  const day = d.getUTCDay(); // 0 (Sun) → 6 (Sat)
+
+  const diff = (day === 0 ? -6 : 1) - day;
+
+  d.setUTCDate(d.getUTCDate() + diff);
+  return d;
+};
+
+export const isSameWeekUTC = (a, b) => {
+  return (
+    startOfWeekUTC(a).getTime() ===
+    startOfWeekUTC(b).getTime()
+  );
+};
+
+export const isAfterUTC = (a, b) => a.getTime() > b.getTime();
+

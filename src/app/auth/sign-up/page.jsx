@@ -88,7 +88,7 @@ const SignUp = () => {
     signUp(body, {
       onSuccess: async (response) => {
         if (response?.status === 201) {
-          const {token} = response.data;
+          const { token } = response.data;
           await setToken(token);
           router.push("/auth/oauth");
         }
@@ -122,6 +122,7 @@ const SignUp = () => {
             onChange={handleInputChange}
             error={errors.fullName}
             leftIcon={<UserIcon />}
+            className="mb-2"
           />
 
           <InputField
@@ -132,6 +133,7 @@ const SignUp = () => {
             onChange={handleInputChange}
             error={errors.email}
             leftIcon={<MailIcon />}
+            className="mb-2"
           />
 
           <InputField
@@ -143,6 +145,7 @@ const SignUp = () => {
             showPasswordToggle={true}
             error={errors.password}
             leftIcon={<LockIcon />}
+            className="mb-2"
           />
           <PasswordStrengthIndicator value={formData.password} />
           <label className="w-100 d-flex gap-2">

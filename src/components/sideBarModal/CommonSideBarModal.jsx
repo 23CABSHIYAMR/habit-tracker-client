@@ -1,7 +1,26 @@
-import React from 'react'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap'
+import React from "react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+} from "reactstrap";
 
-const CommonSideBarModal = ({ disableCompletion, isOpen, toggle, headerTitle, headerSubTitle, bodyContent, primaryBtnTxt, secondaryBtnTxt, primaryAction, primaryActionLoading, secondaryAction }) => {
+const CommonSideBarModal = ({
+  disableCompletion,
+  isOpen,
+  toggle,
+  headerTitle,
+  headerSubTitle,
+  bodyContent,
+  primaryBtnTxt,
+  secondaryBtnTxt,
+  primaryAction,
+  primaryActionLoading,
+  secondaryAction,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -11,14 +30,18 @@ const CommonSideBarModal = ({ disableCompletion, isOpen, toggle, headerTitle, he
       fade={false}
     >
       <ModalHeader toggle={toggle}>
-        <div className='heading'>
+        {/* <div className='heading'>
           <span className='title'>{headerTitle}</span>
           <span className='sub-title'>{headerSubTitle}</span>
+        </div> */}
+        <div className="pending-line"></div>
+
+        <div className="form-header">
+          <h1 className="title m-0">{headerTitle}</h1>
+          <h4 className="sub-title">{headerSubTitle}</h4>
         </div>
       </ModalHeader>
-      <ModalBody>
-        {bodyContent}
-      </ModalBody>
+      <ModalBody>{bodyContent}</ModalBody>
       <ModalFooter className="d-flex gap-2">
         <div style={{ flex: 1 }}>
           <Button
@@ -48,7 +71,7 @@ const CommonSideBarModal = ({ disableCompletion, isOpen, toggle, headerTitle, he
         </div>
       </ModalFooter>
     </Modal>
-  )
-}
+  );
+};
 
-export default CommonSideBarModal
+export default CommonSideBarModal;

@@ -148,6 +148,7 @@ export default function WeekPage() {
       showComparison={true}
       titleFormatter={(s, e) => `${WMDFormat(s)} - ${WMDFormat(e)}`}
       GridComponent={WeekGrid}
+      pageName={"week"}
     />
   );
 }

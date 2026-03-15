@@ -1,7 +1,11 @@
 "use client";
 import { useState } from "react";
 import CustomInput from "@/components/ui/CustomInput";
-import { dayNames, ColorPalette } from "@/constants/index";
+import {
+  dayNames,
+  ColorPalette,
+  maxInputFormCharLength as maxLength,
+} from "@/constants/index";
 
 export default function HabitForm({
   formData,
@@ -9,8 +13,14 @@ export default function HabitForm({
   errors,
   setErrors,
 }) {
+  const [lengthLimit, setLengthLimit] = useState(maxLength);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "habitName") {
+      const currenLength = value.length;
+      setLengthLimit(maxLength - currenLength);
+    }
 
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -36,28 +46,55 @@ export default function HabitForm({
       weekFrequency: [true, true, true, true, true, true, true],
     }));
   };
-
   // ----------------------- UI -----------------------
   return (
-    <div className="flex flex-col gap-4">
+    <div className="d-flex flex-column gap-3">
       {/* HABIT NAME */}
-      <div>
-        <label className="form-label">Habit Name*</label>
-        <CustomInput
-          name="habitName"
-          type="text"
-          placeholder="Enter habit name"
-          value={formData.habitName}
-          onChange={handleInputChange}
-          error={errors.habitName}
-        />
+      <div className="d-flex flex-column gap-2">
+        <div className="space-between align-items-center">
+          <label className="form-label m-0">1. Name this habit</label>
+          <p
+            style={{
+              color: "var(--text-placeholder)",
+              fontSize: "var(--rem-14)",
+            }}
+            className="m-0"
+          >
+            Max 15 characters
+          </p>
+        </div>
+        <div className="position-relative d-flex align-items-center">
+          <CustomInput
+            name="habitName"
+            type="text"
+            placeholder="Enter habit name"
+            value={formData.habitName}
+            onChange={handleInputChange}
+            error={errors.habitName}
+          />
+          <p
+            style={{
+              color: "var(--text-placeholder)",
+              position: "absolute",
+              right: "var(--rem-4)",
+              top: "50%",
+              transform: "translateY(-50%)",
+              fontSize: "var(--rem-14)",
+            }}
+          >
+            {lengthLimit}
+          </p>
+        </div>
       </div>
 
       {/* HABIT TYPE */}
       <div>
-        <label className="form-label">Habit Type</label>
-        <div className="flex gap-4 items-center">
-          <label className="flex items-center gap-2">
+        <label className="form-label">2. Habit Type</label>
+        <div className="d-flex gap-4 items-center">
+          <label
+            className="d-flex align-items-center gap-2"
+            style={{ fontSize: "var(--rem-14)" }}
+          >
             <input
               type="radio"
               name="isPositiveHabit"
@@ -70,7 +107,10 @@ export default function HabitForm({
             To-Do
           </label>
 
-          <label className="flex items-center gap-2">
+          <label
+            className="d-flex align-items-center gap-2"
+            style={{ fontSize: "var(--rem-14)" }}
+          >
             <input
               type="radio"
               name="isPositiveHabit"
@@ -86,20 +126,16 @@ export default function HabitForm({
       </div>
 
       {/* WEEK FREQUENCY */}
-      <div>
-        <label className="form-label">Weekly Frequency</label>
+      <div className="d-flex flex-column gap-2">
+        <label className="form-label m-0">3. Weekly Frequency</label>
 
-        <div className="flex justify-between">
+        <div className="d-flex justify-content-between">
           {dayNames.map((day, i) => (
             <button
               type="button"
               key={i}
-              className={`w-10 p-1.5 text-sm rounded-md border 
-                ${
-                  formData.weekFrequency[i]
-                    ? "bg-[#155EEF] text-white"
-                    : "bg-white border-gray-300"
-                }
+              className={` form-day-btn
+                ${formData.weekFrequency[i] ? "active" : ""}
               `}
               onClick={() => toggleDay(i)}
             >
@@ -108,11 +144,11 @@ export default function HabitForm({
           ))}
         </div>
 
-        <div className="flex gap-2 mt-2">
-          <button type="button" className="btn-outline" onClick={setWeekdays}>
+        <div className="d-flex justify-content-between gap-2">
+          <button type="button" className="w-100 form-day-btn" onClick={setWeekdays}>
             Weekdays
           </button>
-          <button type="button" className="btn-outline" onClick={setEveryday}>
+          <button type="button" className="w-100 form-day-btn" onClick={setEveryday}>
             Everyday
           </button>
         </div>
@@ -120,8 +156,8 @@ export default function HabitForm({
 
       {/* PALETTE */}
       <div>
-        <label className="form-label">Color Palette</label>
-        <div className="center-items justify-content-start gap-2">
+        <label className="form-label">4. Color Palette</label>
+        <div className="center-items justify-content-start gap-2 ps-1">
           {ColorPalette.map((c, index) => (
             <button
               key={index}
@@ -130,7 +166,8 @@ export default function HabitForm({
               style={{
                 background: c,
                 boxShadow:
-                  formData?.palette === c ? `0px 0px 0px 3px ${c}` : "none",
+                  formData?.palette === c ? `0px 0px 0px 5px ${c}` : "none",
+                  opacity:formData?.palette === c?"1":"60%"
               }}
               onClick={() =>
                 setFormData((prev) => ({

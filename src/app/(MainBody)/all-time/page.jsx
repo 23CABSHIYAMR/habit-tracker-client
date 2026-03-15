@@ -17,6 +17,7 @@ export default function AllTime() {
       allowMovement={false}
       showComparison={false}
       titleFormatter={() => MDYFormat(userDetails.createdAt) + " - Till Date"}
+      pageName="all-time"
     />
   );
 }

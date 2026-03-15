@@ -11,6 +11,7 @@ import {
 import { useAppSelector } from "@/ReduxToolkit/hooks";
 
 export default function AnalyticsPageTemplate({
+  pageName,
   getInitialRange,
   getPrevRange,
   getNextRange,
@@ -68,6 +69,7 @@ export default function AnalyticsPageTemplate({
   return (
     <>
       <AnalyticsHeader
+        pageName={pageName}
         dateLabel={titleFormatter(startDate, endDate)}
         canMovePrev={canPrev}
         canMoveNext={canNext}

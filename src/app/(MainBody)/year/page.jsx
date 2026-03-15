@@ -51,6 +51,7 @@ export default function YearPage() {
       showComparison={true}
 
       titleFormatter={(s) => s.getFullYear()}
+      pageName="year"
     />
   );
 }

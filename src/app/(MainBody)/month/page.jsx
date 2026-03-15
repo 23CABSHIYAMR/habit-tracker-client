@@ -30,6 +30,7 @@ export default function MonthPage() {
         `${s.toLocaleString("default", { month: "long" })} ${s.getFullYear()}`
       }
       GridComponent={MonthCalendarGrid}
+      pageName="month"
     />
   );
 }

@@ -15,7 +15,8 @@
     border-radius: var(--rem-40);
     height: 100% !important;
     align-self: stretch;
-    min-height: 105px;
+    min-height: 0;
+    background: var(--habit-1);
   }
 
   .habit-container {
@@ -87,4 +88,33 @@
     font-size: larger;
     font-weight: 600;
   }
+}
+
+.form-title{
+  font-size: var(--rem-28);
+}
+.form-sub-title{
+  font-weight: 300;
+  font-size: var(--rem-14);
+}
+.form-btn{
+  border-radius: var(--rem-24);
+  max-width: 40%;
+  border: 0.5px solid var(--btn-border);
+  font-weight: 500;
+  padding:var(--rem-8) var(--rem-14);
+}
+.form-day-btn{
+  background: none;
+  color:var(--black);
+  padding: var(--rem-6);
+  font-size: var(--rem-14);
+  border-radius: var(--rem-4);
+  border: 0.5px solid var(--btn-border);
+
+}
+
+.form-day-btn.active{
+  background: var(--progress-secondary);
+  border:1.5px solid var(--progress-primary);
 }

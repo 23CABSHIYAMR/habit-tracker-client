@@ -115,6 +115,7 @@ const Login = () => {
             error={errors.email}
             autoComplete="email"
             leftIcon={<MailIcon />}
+            className="mb-2"
           />
 
           {/* PASSWORD */}
@@ -128,6 +129,7 @@ const Login = () => {
             showPasswordToggle={true}
             autoComplete="new-password"
             leftIcon={<LockIcon />}
+            className="mb-2"
           />
 
           {/* TRUSTED DEVICE */}

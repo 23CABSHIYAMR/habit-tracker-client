@@ -66,4 +66,4 @@ export const monthNames = [
   "November",
   "December",
 ];
-export const maxLength = 15;
+export const maxInputFormCharLength = 15;

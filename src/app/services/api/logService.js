@@ -6,8 +6,8 @@ export const logService = {
     return res.data;
   },
 
-  getLogsInRange: async (start, end) => {
-    const res = await api.get(`/habitLog/range?start=${start}&end=${end}`);
+  getLogsInRange: async (startDate, endDate) => {
+    const res = await api.get(`/habitLog/range?startDate=${startDate}&endDate=${endDate}`);
     return res.data;
   },
 

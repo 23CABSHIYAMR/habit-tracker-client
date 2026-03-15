@@ -24,7 +24,7 @@ const InputField = ({
   const isPassword = type === "password" && showPasswordToggle;
 
   return (
-    <div className={`w-100 mb-2 ${className}`}>
+    <div className={`w-100 ${className}`}>
       {/* Input + Icons container */}
       <div className="position-relative">
         {/* Left Icon */}
