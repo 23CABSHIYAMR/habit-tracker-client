@@ -8,6 +8,7 @@ const InputField = ({
   name,
   type = "text",
   placeholder,
+  maxLength= 100,
   value,
   onChange,
   onBlur,
@@ -38,6 +39,7 @@ const InputField = ({
         <input
           id={id || name}
           name={name}
+          maxLength={maxLength}
           type={isPassword ? (showPassword ? "text" : "password") : type}
           placeholder={placeholder}
           value={value}

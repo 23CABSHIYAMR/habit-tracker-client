@@ -65,6 +65,7 @@ export default function HabitForm({
         </div>
         <div className="position-relative d-flex align-items-center">
           <CustomInput
+            maxLength={maxLength}
             name="habitName"
             type="text"
             placeholder="Enter habit name"
